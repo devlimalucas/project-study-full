@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, field_serializer
 from decimal import Decimal
 
 
@@ -8,6 +8,10 @@ class ProdutoBase(BaseModel):
     estoque: int
     descricao: str | None = None
 
+    @field_serializer("preco")
+    def serialize_preco(self, value: Decimal) -> float:
+        return float(value)
+
 
 class ProdutoCreate(ProdutoBase):
     pass
@@ -16,11 +20,7 @@ class ProdutoCreate(ProdutoBase):
 class ProdutoRead(ProdutoBase):
     id: int
 
-    class Config:
-        from_attributes = True
-        json_encoders = {
-            Decimal: lambda v: float(v)
-        }
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ProdutoUpdate(BaseModel):
