@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-from pydantic import BaseModel
-=======
 from pydantic import BaseModel, ConfigDict, field_serializer, constr, condecimal, conint
->>>>>>> Stashed changes
 from decimal import Decimal
 
 
@@ -12,14 +8,11 @@ class ProdutoBase(BaseModel):
     estoque: conint(ge=0)
     descricao: str | None = None
 
-<<<<<<< Updated upstream
-=======
     # Serializa Decimal -> float para saída JSON
     @field_serializer("preco")
     def serialize_preco(self, value: Decimal) -> float:
         return float(value)
 
->>>>>>> Stashed changes
 
 class ProdutoCreate(ProdutoBase):
     """Schema usado para criação de produto (POST)."""
@@ -30,15 +23,7 @@ class ProdutoRead(ProdutoBase):
     """Schema usado para leitura de produto (GET)."""
     id: int
 
-<<<<<<< Updated upstream
-    class Config:
-        from_attributes = True
-        json_encoders = {
-            Decimal: lambda v: float(v)
-        }
-=======
     model_config = ConfigDict(from_attributes=True)  # ORM -> Pydantic
->>>>>>> Stashed changes
 
 
 class ProdutoUpdate(BaseModel):
