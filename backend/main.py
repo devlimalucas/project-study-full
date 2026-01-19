@@ -1,15 +1,15 @@
 import time
-import models.produto
-import models.venda
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.exc import OperationalError
-from infra.database import Base, engine
-from routes import produtos
 
+from infra import Base, engine  # agora importado direto do __init__.py
+import models  # importa todos os models via __init__.py
+from routers import produtos_router, usuarios_router  # routers expostos no __init__.py
 
 app = FastAPI()
 
+# Configuração de CORS para permitir acesso do frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
@@ -18,7 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+# Espera o banco ficar pronto
 for i in range(30):
     try:
         with engine.connect() as conn:
@@ -28,6 +28,10 @@ for i in range(30):
         print("⏳ Banco ainda não está pronto, tentando novamente...")
         time.sleep(2)
 
+# Cria todas as tabelas
 Base.metadata.create_all(bind=engine)
 
-app.include_router(produtos.router)
+# Inclui todas as rotas
+app.include_router(produtos_router)
+app.include_router(usuarios_router)
+# app.include_router(vendas_router)
