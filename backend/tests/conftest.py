@@ -4,8 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from infra import Base
-from infra import get_db
+from infra.database import Base
+from infra.deps import get_db
 from main import app
 
 # Banco em memória para testes
@@ -30,6 +30,7 @@ def setup_database():
     yield
     Base.metadata.drop_all(bind=engine)
 
+
 # Sobrescrever dependência get_db para usar banco de testes
 def override_get_db():
     db = TestingSessionLocal()
@@ -38,7 +39,9 @@ def override_get_db():
     finally:
         db.close()
 
+
 app.dependency_overrides[get_db] = override_get_db
+
 
 # Cliente de testes
 @pytest.fixture
