@@ -3,4 +3,11 @@ uvicorn[standard]
 sqlalchemy
 pymysql
 alembic
+<<<<<<< Updated upstream
 cryptography
+=======
+cryptography
+pytest
+httpx
+email-validator
+>>>>>>> Stashed changes
