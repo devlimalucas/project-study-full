@@ -1,9 +1,9 @@
 import pytest
 
 @pytest.mark.parametrize("payload", [
-    {"nome": "ab", "preco": 10.0, "estoque": 5, "descricao": "Nome curto"},
-    {"nome": "Produto OK", "preco": -10, "estoque": 5, "descricao": "Preço negativo"},
-    {"nome": "Produto OK", "preco": 10.0, "estoque": -1, "descricao": "Estoque negativo"},
+    {"nome": "P", "preco": 10.0, "estoque": 5},  # nome muito curto
+    {"nome": "Produto Inválido", "preco": -1.0, "estoque": 5},  # preço negativo
+    {"nome": "Produto Inválido", "preco": 10.0, "estoque": -5},  # estoque negativo
 ])
 def test_criar_produto_invalido(client, payload):
     response = client.post("/produtos/", json=payload)
@@ -15,8 +15,13 @@ def test_obter_produto_inexistente(client):
     assert response.status_code == 404
 
 
-def test_atualizar_produto_inexistente(client):
+def test_atualizar_produto_inexistente_put(client):
     response = client.put("/produtos/9999", json={"nome": "Novo Nome"})
+    assert response.status_code == 404
+
+
+def test_atualizar_produto_inexistente_patch(client):
+    response = client.patch("/produtos/9999", json={"estoque": 10})
     assert response.status_code == 404
 
 
