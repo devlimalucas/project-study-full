@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from infra import Base
 
+
 class Usuario(Base):
     __tablename__ = "usuarios"
 
