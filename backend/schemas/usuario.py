@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, constr
+from pydantic import BaseModel, EmailStr, constr, ConfigDict
 from typing import Literal
 
 
@@ -15,8 +15,8 @@ class UsuarioCreate(UsuarioBase):
 class UsuarioRead(UsuarioBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    # Pydantic v2 usa ConfigDict em vez de class Config
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UsuarioUpdate(BaseModel):
