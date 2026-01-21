@@ -1,7 +1,6 @@
-from pydantic import BaseModel, ConfigDict, condecimal, conint
+from pydantic import BaseModel, ConfigDict, conint
 from datetime import date
 from decimal import Decimal
-
 
 class VendaBase(BaseModel):
     data: date
@@ -9,21 +8,18 @@ class VendaBase(BaseModel):
     cliente_id: int
     vendedor_id: int
     quantidade: conint(gt=0)
-    preco_unitario: condecimal(gt=0, max_digits=10, decimal_places=2)
-    receita: Decimal | None = None  # calculada no backend
-
 
 class VendaCreate(VendaBase):
     """Schema usado para criação de venda (POST)."""
     pass
 
-
 class VendaRead(VendaBase):
     """Schema usado para leitura de venda (GET)."""
     id: int
+    preco_unitario: Decimal
+    receita: Decimal
 
     model_config = ConfigDict(from_attributes=True)
-
 
 class VendaUpdate(BaseModel):
     """Schema usado para atualização de venda (PUT/PATCH)."""
@@ -32,5 +28,3 @@ class VendaUpdate(BaseModel):
     cliente_id: int | None = None
     vendedor_id: int | None = None
     quantidade: int | None = None
-    preco_unitario: Decimal | None = None
-    receita: Decimal | None = None
