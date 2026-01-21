@@ -23,9 +23,11 @@ TestingSessionLocal = sessionmaker(
     bind=engine
 )
 
-# Criar e destruir tabelas automaticamente
-@pytest.fixture(scope="session", autouse=True)
+
+# Resetar banco antes de cada teste
+@pytest.fixture(autouse=True)
 def setup_database():
+    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     yield
     Base.metadata.drop_all(bind=engine)
