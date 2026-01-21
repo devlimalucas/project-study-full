@@ -1,6 +1,29 @@
+version: "3.9"
+
 services:
+  db:
+    image: mysql:8
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d
+      - ./mysql-files:/var/lib/mysql-files
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -h 127.0.0.1 -u${DB_USER} -p${DB_PASS} -e 'USE ${DB_NAME};'"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
   backend:
     build: ./backend
+    container_name: backend
     ports:
       - "8000:8000"
     depends_on:
@@ -12,6 +35,8 @@ services:
       DB_NAME: ${DB_NAME}
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
+    volumes:
+      - ./backend:/app
 
   frontend:
     build: ./frontend
@@ -20,24 +45,8 @@ services:
       - "3000:5173"
     depends_on:
       - backend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     environment:
       VITE_API_URL: ${VITE_API_URL}
 
-  db:
-    image: mysql:8
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-    ports:
-      - "3307:3306"
-    command: --local-infile=1 --secure-file-priv=""
-    volumes:
-      - ./db:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+volumes:
+  mysql_data:

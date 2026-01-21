@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, DECIMAL
-from infra.database import Base
+from sqlalchemy import Column, Integer, String, Float, Text
+from infra import Base
 
 
 class Produto(Base):
@@ -7,6 +7,6 @@ class Produto(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     nome = Column(String(255), nullable=False)
-    preco = Column(DECIMAL(10, 2), nullable=False)
+    preco = Column(Float, nullable=False)
     estoque = Column(Integer, nullable=False)
-    descricao = Column(String(255), nullable=True)
+    descricao = Column(Text)

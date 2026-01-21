@@ -1,19 +1,15 @@
-CREATE TABLE IF NOT EXISTS vendas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    Data DATE,
-    Produto VARCHAR(100),
-    Categoria VARCHAR(100),
-    Cliente VARCHAR(100),
-    Regiao VARCHAR(100),
-    Quantidade INT,
-    Preco_Unitario DECIMAL(10,2),
-    Receita DECIMAL(10,2)
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- init.sql correto: apenas configuração inicial do banco
 
-LOAD DATA INFILE '/docker-entrypoint-initdb.d/vendas.csv'
-INTO TABLE vendas
-FIELDS TERMINATED BY ','
-ENCLOSED BY '"'
-LINES TERMINATED BY '\n'
-IGNORE 1 ROWS
-(Data, Produto, Categoria, Cliente, Regiao, Quantidade, Preco_Unitario, Receita);
+-- Garante que o banco use UTF-8 completo
+ALTER DATABASE loja CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Opcional: define charset padrão para novas tabelas
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+SET collation_connection = utf8mb4_unicode_ci;
+
+-- Se quiser criar um usuário específico para a aplicação:
+-- CREATE USER 'appuser'@'%' IDENTIFIED BY 'senha_segura';
+-- GRANT ALL PRIVILEGES ON loja.* TO 'appuser'@'%';
+-- FLUSH PRIVILEGES;
+

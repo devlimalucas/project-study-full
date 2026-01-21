@@ -6,3 +6,8 @@ alembic
 cryptography
 pytest
 httpx
+email-validator
+pytest-cov
+pytest-mock
+faker
+factory_boy

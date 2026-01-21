@@ -1,24 +1,36 @@
+# Frontend
 node_modules/
 dist/
 *.log
+
+# Backend (Python)
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.sqlite3
+*.py[cod]
 *.egg-info/
 *.coverage
 .coverage
 htmlcov/
+
+# Ambiente
 .env
 backend/.env
 frontend/.env
+
+# Banco de dados (não versionar dados locais)
+mysql_data/
+*.sqlite3
+
+# Arquivos temporários
 *.pid
 *.seed
 *.bak
 *.swp
 *.swo
+
+# Docker
 docker-compose.override.yml
+
+# IDE / Sistema
 .vscode/
 .idea/
 *.iml
