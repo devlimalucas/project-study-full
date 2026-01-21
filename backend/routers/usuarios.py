@@ -54,6 +54,23 @@ def atualizar_usuario(usuario_id: int, usuario: UsuarioUpdate, db: Session = Dep
     return db_usuario
 
 
+@router.patch("/{usuario_id}", response_model=UsuarioRead)
+def atualizar_usuario_parcial(usuario_id: int, usuario: UsuarioUpdate, db: Session = Depends(get_db)) -> UsuarioRead:
+    db_usuario = get_usuario_or_404(usuario_id, db)
+
+    # Só aplica os campos enviados na requisição
+    update_data = usuario.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        if key == "senha":
+            setattr(db_usuario, "senha_hash", value)
+        else:
+            setattr(db_usuario, key, value)
+
+    db.commit()
+    db.refresh(db_usuario)
+    return db_usuario
+
+
 @router.delete("/{usuario_id}", status_code=204)
 def deletar_usuario(usuario_id: int, db: Session = Depends(get_db)):
     db_usuario = get_usuario_or_404(usuario_id, db)
