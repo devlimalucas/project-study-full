@@ -21,8 +21,13 @@ def test_obter_usuario_inexistente(client):
     assert response.status_code == 404
 
 
-def test_atualizar_usuario_inexistente(client):
+def test_atualizar_usuario_inexistente_put(client):
     response = client.put("/usuarios/9999", json={"nome": "Novo Nome"})
+    assert response.status_code == 404
+
+
+def test_atualizar_usuario_inexistente_patch(client):
+    response = client.patch("/usuarios/9999", json={"nome": "Nome Parcial"})
     assert response.status_code == 404
 
 

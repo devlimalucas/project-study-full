@@ -20,15 +20,12 @@ def listar_produtos(db: Session = Depends(get_db)) -> list[ProdutoRead]:
 
 
 @router.get("/{produto_id}", response_model=ProdutoRead)
-def obter_produto(produto_id: int,
-                  db: Session = Depends(get_db)) -> ProdutoRead:
+def obter_produto(produto_id: int, db: Session = Depends(get_db)) -> ProdutoRead:
     return get_produto_or_404(produto_id, db)
 
 
 @router.post("/", response_model=ProdutoRead, status_code=201)
-def criar_produto(produto: ProdutoCreate, db: Session
-                  = Depends(get_db)) -> ProdutoRead:
-
+def criar_produto(produto: ProdutoCreate, db: Session = Depends(get_db)) -> ProdutoRead:
     db_produto = Produto(**produto.model_dump())
     db.add(db_produto)
     db.commit()
@@ -37,10 +34,23 @@ def criar_produto(produto: ProdutoCreate, db: Session
 
 
 @router.put("/{produto_id}", response_model=ProdutoRead)
-def atualizar_produto(produto_id: int, produto: ProdutoUpdate, db: Session
-                      = Depends(get_db)) -> ProdutoRead:
+def atualizar_produto(produto_id: int, produto: ProdutoUpdate, db: Session = Depends(get_db)) -> ProdutoRead:
     db_produto = get_produto_or_404(produto_id, db)
 
+    update_data = produto.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(db_produto, key, value)
+
+    db.commit()
+    db.refresh(db_produto)
+    return db_produto
+
+
+@router.patch("/{produto_id}", response_model=ProdutoRead)
+def atualizar_produto_parcial(produto_id: int, produto: ProdutoUpdate, db: Session = Depends(get_db)) -> ProdutoRead:
+    db_produto = get_produto_or_404(produto_id, db)
+
+    # Só aplica os campos enviados na requisição
     update_data = produto.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(db_produto, key, value)
