@@ -6,16 +6,17 @@ class VendaBase(BaseModel):
     data: date
     produto_id: int
     cliente_id: int
-    vendedor_id: int
     quantidade: conint(gt=0)
 
 class VendaCreate(VendaBase):
     """Schema usado para criação de venda (POST)."""
-    pass
+    # vendedor_id não deve ser obrigatório no POST
+    vendedor_id: int | None = None
 
 class VendaRead(VendaBase):
     """Schema usado para leitura de venda (GET)."""
     id: int
+    vendedor_id: int
     preco_unitario: Decimal
     receita: Decimal
 
