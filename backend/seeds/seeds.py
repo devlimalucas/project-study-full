@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from infra import SessionLocal, get_password_hash
+from infra import SessionLocal
+from core.security_jwt import get_password_hash
 from models import Produto, Usuario
 
 # Dados iniciais centralizados
@@ -21,26 +22,39 @@ def seed_produtos(db: Session):
         produtos = [Produto(**p) for p in PRODUTOS_INICIAIS]
         db.bulk_save_objects(produtos)
         print(f"🌱 {len(produtos)} produtos iniciais inseridos")
+    else:
+        print("ℹ️ Produtos já existentes, nenhum inserido.")
 
 
 def seed_usuarios(db: Session):
+    count = 0
     for u in USUARIOS_INICIAIS:
         if not db.query(Usuario).filter_by(email=u["email"]).first():
+            senha_truncada = u["senha"][:72]  # garante compatibilidade com bcrypt
             usuario = Usuario(
                 nome=u["nome"],
                 email=u["email"],
-                senha_hash=get_password_hash(u["senha"]),
+                senha_hash=get_password_hash(senha_truncada),
                 role=u["role"]
             )
             db.add(usuario)
-            print(f"🌱 Usuário {u['role']} inserido")
+            count += 1
+            print(f"🌱 Usuário {u['role']} ({u['email']}) inserido")
+        else:
+            print(f"ℹ️ Usuário {u['email']} já existe, não inserido.")
+    if count:
+        print(f"🌱 {count} usuários iniciais inseridos")
+    else:
+        print("ℹ️ Nenhum usuário novo inserido.")
 
 
 def run():
     with SessionLocal() as db:
+        print("🚀 Iniciando processo de seed...")
         seed_produtos(db)
         seed_usuarios(db)
         db.commit()
+        print("✅ Seed concluído com sucesso.")
 
 
 if __name__ == "__main__":
