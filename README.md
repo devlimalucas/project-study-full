@@ -3,7 +3,7 @@
 Projeto **fullstack** de uma loja online, desenvolvido com **FastAPI** no backend e **React + Vite + TypeScript** no frontend.  
 Banco de dados: **MySQL via Docker**.  
 
-🎯 **Objetivo**: praticar boas práticas de desenvolvimento, testes automatizados e deploy com CI/CD, explorando o ciclo completo de um app moderno.
+**Objetivo**: praticar boas práticas de desenvolvimento, testes automatizados e deploy com CI/CD, explorando o ciclo completo de um app moderno.
 
 ---
 
@@ -17,89 +17,96 @@ Banco de dados: **MySQL via Docker**.
 
 ---
 
-## 📆 Plano de Estudos (11 Dias)
+## 📆 Plano de Desenvolvimento (11 Etapas)
 
 ### ✅ Concluído
-- **Dia 1 — Infraestrutura**  
-  - Configuração do Docker Compose com MySQL + FastAPI + React.  
-  - Containers comunicando em rede.  
-  - Banco inicializado com charset correto.  
 
-- **Dia 2 — Modelos e Banco (parcial)**  
-  - Criados models iniciais: Produto, Usuário, Venda.  
-  - Migrations rodando com Alembic.  
-  - Banco sincronizado com os models.  
-  - Ajuste posterior: `Usuario` passou a ter `senha_hash` e `role`.  
+**Etapa 1 — Infraestrutura**  
+- Criar Dockerfile e docker-compose.yml.  
+- Subir containers: MySQL, FastAPI, React.  
+- Garantir comunicação entre serviços e banco inicializado.  
+➡️ Afeta: toda a base do projeto, pois sem infraestrutura nada roda.
 
-- **Dia 3 — Backend básico (Produtos)**  
-  - CRUD de produtos implementado.  
-  - Testes de inserção e listagem funcionando.  
-  - Documentação via Swagger disponível.  
+**Etapa 2 — Modelos e Banco (parcial)**  
+- Definir models iniciais: Produto, Usuário, Venda.  
+- Configurar Alembic para migrations.  
+- Sincronizar banco com schema inicial.  
+➡️ Afeta: CRUDs, autenticação e vendas, pois dependem dos models e migrations.
 
-- **Dia 4 — Revisão Models + Seeds + Migrations + CRUD completo**  
-  - Models revisados e alinhados com o banco.  
-  - Seeds rodando (produtos e usuários iniciais).  
-  - Migration inicial aplicada com sucesso.  
-  - FastAPI sobe sem erro.  
-  - CRUD completo de **Produtos, Usuários e Vendas** implementado.  
-  - Testes automatizados cobrindo criação, listagem, obtenção, atualização e exclusão.  
-  - Testes de erros para cenários como estoque insuficiente e entidades inexistentes.  
-  - Estrutura de testes reorganizada em módulos (`produtos/`, `usuarios/`, `vendas/`) com uso de factories.  
-  - Atualizado `requirements.txt` para incluir `email-validator`.  
+**Etapa 3 — Backend básico (Produtos)**  
+- Implementar CRUD de produtos.  
+- Criar testes de inserção/listagem.  
+- Validar documentação automática no Swagger.  
+➡️ Afeta: testes de vendas (estoque), frontend futuro (listagem de produtos).
+
+**Etapa 4 — Revisão Models + Seeds + Migrations**  
+- Revisar models e relacionamentos.  
+- Criar seeds para dados iniciais.  
+- Aplicar migrations e validar subida do FastAPI sem erros.  
+➡️ Afeta: consistência do banco, testes automatizados e dados iniciais para frontend.
+
+**Etapa 5 — Autenticação e Autorização**  
+- Implementar login/registro.  
+- Configurar JWT e middleware de validação.  
+- Restringir acesso por role.  
+➡️ Afeta: rotas protegidas (produtos, usuários, vendas), testes de autorização, segurança geral.
+
+**Etapa 6 — Vendas (CRUD)**  
+- Consolidar rotas `/vendas` (listar, criar, atualizar, deletar).  
+- Validar regras de negócio (estoque, cliente existente, vendedor autenticado).  
+➡️ Afeta: fluxo principal da aplicação, base para relatórios e ETL.
 
 ---
 
-### 🔜 Próximos passos
-- **Dia 5 — Autenticação e Autorização**  
-  - Implementar login/registro de usuários.  
-  - Configurar JWT para proteger rotas.  
-  - Middleware de validação de token.  
-  - Restringir rotas por role (admin, cliente, vendedor).  
+### 🔜 Próximas Etapas
 
-- **Dia 6 — Vendas (refino)**  
-  - Importação de vendas via CSV.  
-  - Validações extras (quantidade inválida, data inválida).  
+**Etapa 7 — ETL e Validação de Dados**  
+- Importação e exportação de vendas via CSV.  
+- Uso de **pandas** para tratamento e normalização.  
+- Permitir que **admin** suba dados externos e extraia dados do banco.  
+- Validar consistência geral das regras de negócio.  
+- Preparar dados para dashboards em BI (Metabase/Power BI).  
+➡️ Afeta: integração com relatórios, análise de dados e estudo prático de pandas + BI.
 
-- **Dia 7 — ETL**  
-  - Pipeline para importar/exportar dados (CSV ↔ banco).  
-  - Normalização de dados externos.  
-  - Automatizar carga de vendas/produtos.  
+**Etapa 8 — Frontend inicial**  
+- Criar telas em React (produtos, usuários, vendas).  
+- Consumir APIs do backend.  
+- Validar integração frontend ↔ backend.  
+➡️ Afeta: experiência do usuário, validação prática das rotas.
 
-- **Dia 8 — Frontend inicial**  
-  - Criar telas em React (produtos, usuários, vendas).  
-  - Consumir APIs do backend.  
-  - Validar integração frontend ↔ backend.  
+**Etapa 9 — Mensageria**  
+- Subir RabbitMQ no Docker Compose.  
+- Publicar evento `VendaCriada`.  
+- Criar consumidor simples para logar eventos.  
+➡️ Afeta: escalabilidade, integração com outros serviços.
 
-- **Dia 9 — Mensageria**  
-  - Subir RabbitMQ no Docker Compose.  
-  - Publicar evento `VendaCriada`.  
-  - Criar consumidor simples para logar eventos.  
+**Etapa 10 — Relatórios**  
+- Integrar Metabase/Power BI ao banco.  
+- Criar dashboards (vendas por região, receita por produto, desempenho de vendedores).  
+➡️ Afeta: análise de negócio, tomada de decisão.
 
-- **Dia 10 — Relatórios**  
-  - Integrar Metabase/Power BI ao banco.  
-  - Criar dashboards (vendas por região, receita por produto, desempenho de vendedores).  
-
-- **Dia 11 — Inteligência Artificial + CI/CD**  
-  - Criar endpoint `/recomendacoes`.  
-  - Treinar modelo simples com histórico de vendas.  
-  - Configurar pipeline CI/CD (GitHub Actions).  
-  - Deploy em nuvem (Render, Railway, Fly.io).  
+**Etapa 11 — Inteligência Artificial + CI/CD**  
+- Criar endpoint `/recomendacoes`.  
+- Treinar modelo simples com histórico de vendas.  
+- Configurar pipeline CI/CD (GitHub Actions).  
+- Deploy em nuvem (Render, Railway, Fly.io).  
+➡️ Afeta: automação, inteligência de negócio, entrega contínua.
 
 ---
 
 ## ✅ Status atual
 - CRUD de **Produtos, Usuários e Vendas** implementado e testado.  
+- Autenticação e autorização com JWT funcionando.  
 - Cobertura de testes sólida (~92%).  
-- Estrutura pronta para avançar para autenticação (Dia 5).  
+- Estrutura pronta para avançar para **Etapa 7 — ETL e Validação de Dados**.  
 
 ---
 
 ## 🎯 Objetivo final
-Ao término dos 11 dias, o projeto será um **MVP funcional de loja online fullstack**, cobrindo:  
+Ao término das etapas, o projeto será um **MVP funcional de loja online fullstack**, cobrindo:  
 - Backend com FastAPI e banco MySQL.  
 - Frontend em React.  
 - Testes automatizados.  
 - Mensageria e relatórios.  
 - Deploy com CI/CD.  
 - Extensível para estudos posteriores em segurança, mensageria, BI, IA e DevOps.  
-
