@@ -11,3 +11,6 @@ pytest-cov
 pytest-mock
 faker
 factory_boy
+python-jose[cryptography]
+bcrypt==4.1.2
+passlib[bcrypt]
