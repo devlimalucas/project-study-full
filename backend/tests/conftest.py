@@ -7,6 +7,8 @@ from sqlalchemy.pool import StaticPool
 from infra.database import Base
 from infra.deps import get_db
 from main import app
+from models import Usuario
+from core.security_jwt import get_password_hash
 
 # Banco em memória para testes
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
@@ -49,3 +51,37 @@ app.dependency_overrides[get_db] = override_get_db
 @pytest.fixture
 def client():
     return TestClient(app)
+
+
+# ------------------------
+# Helpers para auth
+# ------------------------
+
+@pytest.fixture
+def criar_usuario_admin():
+    """Cria e retorna um usuário admin no banco de testes."""
+    db = TestingSessionLocal()
+    admin = Usuario(
+        nome="Admin Test",
+        email="admin@test.com",
+        senha_hash=get_password_hash("admin123"),
+        role="admin"
+    )
+    db.add(admin)
+    db.commit()
+    db.refresh(admin)
+    db.close()
+    return admin
+
+
+@pytest.fixture
+def autenticar():
+    """Retorna uma função helper para login e token JWT."""
+    def _login(client, email: str, senha: str) -> str:
+        response = client.post("/auth/login", json={"email": email, "senha": senha})
+        data = response.json()
+        if response.status_code != 200 or "access_token" not in data:
+            raise RuntimeError(f"Falha ao autenticar: {data}")
+        return data["access_token"]
+    return _login
+
