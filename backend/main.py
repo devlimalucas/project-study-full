@@ -7,7 +7,7 @@ from fastapi.openapi.utils import get_openapi
 
 from infra import Base, engine
 import models  # garante que todas as models sejam registradas
-from routers import produtos_router, usuarios_router, vendas_router, auth_router
+from routers import produtos_router, usuarios_router, vendas_router, auth_router, etl_vendas_router
 
 app = FastAPI()
 
@@ -39,6 +39,8 @@ app.include_router(produtos_router)
 app.include_router(usuarios_router)
 app.include_router(vendas_router)
 app.include_router(auth_router)
+app.include_router(etl_vendas_router)
+
 
 
 def custom_openapi():
