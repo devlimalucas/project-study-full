@@ -56,17 +56,17 @@ Banco de dados: **MySQL via Docker**.
 - Validar regras de negócio (estoque, cliente existente, vendedor autenticado).  
 ➡️ Afeta: fluxo principal da aplicação, base para relatórios e ETL.
 
----
-
-### 🔜 Próximas Etapas
-
 **Etapa 7 — ETL e Validação de Dados**  
-- Importação e exportação de vendas via CSV.  
+- Implementar rotas `/etl/import` e `/etl/export`.  
 - Uso de **pandas** para tratamento e normalização.  
 - Permitir que **admin** suba dados externos e extraia dados do banco.  
 - Validar consistência geral das regras de negócio.  
-- Preparar dados para dashboards em BI (Metabase/Power BI).  
+- Criar testes de sucesso e erro cobrindo todos os cenários críticos.  
 ➡️ Afeta: integração com relatórios, análise de dados e estudo prático de pandas + BI.
+
+---
+
+### 🔜 Próximas Etapas
 
 **Etapa 8 — Frontend inicial**  
 - Criar telas em React (produtos, usuários, vendas).  
@@ -97,8 +97,9 @@ Banco de dados: **MySQL via Docker**.
 ## ✅ Status atual
 - CRUD de **Produtos, Usuários e Vendas** implementado e testado.  
 - Autenticação e autorização com JWT funcionando.  
-- Cobertura de testes sólida (~92%).  
-- Estrutura pronta para avançar para **Etapa 7 — ETL e Validação de Dados**.  
+- ETL de vendas concluído (import/export com validações e testes).  
+- Cobertura de testes sólida (~94%).  
+- Estrutura pronta para avançar para **Etapa 8 — Frontend inicial**.  
 
 ---
 
